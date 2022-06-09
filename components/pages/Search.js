@@ -9,9 +9,12 @@ import {
 	TouchableOpacity,
 	ScrollView,
 } from "react-native";
+import { useNavigation } from "@react-navigation/native";
+
 const API_KEY = "d779136e-7305-4bca-a2cf-7d8033fdb6fc";
 
 export default function Search() {
+	const navigation = useNavigation();
 	const [textval, settextval] = useState("");
 	const [suggestionList, setsuggesions] = useState([]);
 	async function getNameList(query) {
@@ -25,14 +28,27 @@ export default function Search() {
 			return null;
 		}
 	}
-	async function textChange(text) {
+	async function textChange(text, count = 5) {
+		if (count < 5) return;
 		settextval(text);
 		const res = await getNameList(text);
-		console.log("====================================");
-		console.log(res);
-		console.log("====================================");
-		if (res == null) return;
-		setsuggesions(res);
+		if (res) {
+			var flterres = [];
+			for (var i = 0; i < res.length; i++) {
+				if (
+					!res[i].name ||
+					!res[i].description ||
+					!res[i].reference_image_id ||
+					!res[i].alt_names
+				)
+					continue;
+				flterres.push(res[i]);
+			}
+			setsuggesions(flterres);
+			return;
+		}
+		setsuggesions([]);
+		textChange(text, count--);
 	}
 	return (
 		<SafeAreaView
@@ -52,8 +68,18 @@ export default function Search() {
 					placeholder={"Search Cat Breeds"}
 				/>
 				<ScrollView style={{ paddingHorizontal: 20 }}>
-					{suggestionList.map((item) => (
+					{suggestionList.map((item, index) => (
 						<TouchableOpacity
+							key={item + index}
+							onPress={() =>
+								navigation.navigate("CatInfo", {
+									name: item.name,
+									origin: item.origin,
+									description: item.description,
+                                    imgid: item.reference_image_id,
+                                    alt_names:
+								})
+							}
 							style={{
 								padding: 10,
 								paddingVertical: 15,
@@ -62,7 +88,10 @@ export default function Search() {
 								borderRadius: 10,
 							}}
 						>
-							<Text style={{ color: "black", fontWeight: "bold" }}>
+							<Text
+								key={index + item}
+								style={{ color: "black", fontWeight: "bold" }}
+							>
 								{item.name}
 							</Text>
 						</TouchableOpacity>
