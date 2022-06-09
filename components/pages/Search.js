@@ -44,6 +44,7 @@ export default function Search() {
 					continue;
 				flterres.push(res[i]);
 			}
+			// console.log(flterres[0]);
 			setsuggesions(flterres);
 			return;
 		}
@@ -77,6 +78,13 @@ export default function Search() {
 									origin: item.origin,
 									description: item.description,
 									imgid: item.reference_image_id,
+									alt_names: item.alt_names,
+									origin: item.origin,
+									temperament: item.temperament,
+									lifespan: item.life_span,
+									adaptability: item.adaptability,
+									affection: item.affection_level,
+									wiki: item.wikipedia_url,
 								})
 							}
 							style={{

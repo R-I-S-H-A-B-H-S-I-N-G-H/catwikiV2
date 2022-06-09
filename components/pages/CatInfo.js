@@ -9,6 +9,7 @@ import {
 	TouchableOpacity,
 	ScrollView,
 	Image,
+	Linking,
 } from "react-native";
 const API_KEY = "d779136e-7305-4bca-a2cf-7d8033fdb6fc";
 
@@ -16,6 +17,15 @@ export default function CatInfo({ route }) {
 	const name = route.params.name;
 	const imgid = route.params.imgid;
 	const description = route.params.description;
+	const alt_names = route.params.alt_names;
+	const origin = route.params.origin;
+	const temperament = route.params.temperament;
+	const lifespan = route.params.lifespan;
+	const adaptability = route.params.adaptability;
+	const wiki = route.params.wiki;
+
+	const affection = route.params.affection;
+
 	const [imgUrl, setimgURL] = useState("/empty");
 
 	async function getImgbyId(id, count = 5) {
@@ -44,7 +54,115 @@ export default function CatInfo({ route }) {
 		<SafeAreaView style={styles.container}>
 			<Image source={{ uri: imgUrl }} style={styles.cover} />
 			<Text style={styles.title}>{name}</Text>
+			<Text
+				style={{
+					textAlign: "center",
+					padding: 5,
+					fontWeight: "bold",
+				}}
+			>
+				{alt_names}
+			</Text>
+			<View>
+				<View
+					style={{
+						display: "flex",
+						flexDirection: "row",
+						justifyContent: "space-around",
+					}}
+				>
+					{origin && (
+						<View
+							style={{
+								backgroundColor: "#A4FF7F",
+								marginHorizontal: 30,
+								marginVertical: 5,
+								padding: 5,
+								borderRadius: 10,
+								borderColor: "green",
+								borderWidth: 1,
+							}}
+						>
+							<Text style={{ textAlign: "center" }}>{origin}</Text>
+						</View>
+					)}
+
+					{lifespan && (
+						<View
+							style={{
+								backgroundColor: "#E56E6E",
+								marginHorizontal: 30,
+								marginVertical: 5,
+								padding: 5,
+								borderRadius: 10,
+								borderColor: "orange",
+								borderWidth: 1,
+							}}
+						>
+							<Text style={{ textAlign: "center" }}>{lifespan + " yrs"}</Text>
+						</View>
+					)}
+					{adaptability && (
+						<View
+							style={{
+								backgroundColor: "#FFCC99",
+								marginHorizontal: 30,
+								marginVertical: 5,
+								padding: 5,
+								borderRadius: 10,
+								borderColor: "orange",
+								borderWidth: 1,
+							}}
+						>
+							<Text
+								style={{ textAlign: "center" }}
+							>{`adaptability : ${adaptability}`}</Text>
+						</View>
+					)}
+					{affection && (
+						<View
+							style={{
+								backgroundColor: "#FFCCDC",
+								marginHorizontal: 30,
+								marginVertical: 5,
+								padding: 5,
+								borderRadius: 10,
+								borderColor: "pink",
+								borderWidth: 1,
+							}}
+						>
+							<Text
+								style={{ textAlign: "center" }}
+							>{`Affection : ${affection}`}</Text>
+						</View>
+					)}
+				</View>
+				{temperament && (
+					<View
+						style={{
+							backgroundColor: "#FFCCCC",
+							marginHorizontal: 30,
+							marginVertical: 5,
+							padding: 5,
+							borderRadius: 10,
+							borderColor: "red",
+							borderWidth: 1,
+						}}
+					>
+						<Text style={{ textAlign: "center" }}>{temperament}</Text>
+					</View>
+				)}
+			</View>
+
 			<Text style={styles.des}>{description}</Text>
+			<TouchableOpacity
+				style={styles.button}
+				onPress={async () => await Linking.openURL(wiki)}
+			>
+				<Text style={{ textAlign: "center", fontWeight: "bold", fontSize: 20 }}>
+					Read more at Wikipedia
+				</Text>
+			</TouchableOpacity>
 		</SafeAreaView>
 	);
 }
@@ -64,7 +182,13 @@ const styles = StyleSheet.create({
 	},
 	cover: {
 		width: "100%",
-		aspectRatio: 18 / 15,
+		aspectRatio: 18 / 17,
 		resizeMode: "cover",
+	},
+	button: {
+		margin: 30,
+		padding: 15,
+		// backgroundColor: "gray",
+		borderRadius: 5,
 	},
 });

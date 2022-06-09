@@ -36,7 +36,12 @@ function getImgbyId(id) {
 
 export default function MainArea() {
 	const navigation = useNavigation();
-	const [imgURL, setimgURL] = useState([loading, loading, loading, loading]);
+	const [imgURL, setimgURL] = useState([
+		"https://cdn2.thecatapi.com/images/a8nIYvs6S.jpg",
+		"https://cdn2.thecatapi.com/images/O3btzLlsO.png",
+		"https://cdn2.thecatapi.com/images/06dgGmEOV.jpg",
+		"https://cdn2.thecatapi.com/images/II9dOZmrw.jpg",
+	]);
 	const [catData, setCatdata] = useState([
 		{ name: "", description: "", reference_image_id: "" },
 		{ name: "", description: "", reference_image_id: "" },
@@ -56,15 +61,7 @@ export default function MainArea() {
 		for (var i = 0; i < 4; i++) {
 			const br = await getcatbyBreed(nameList[i]);
 			raw[i] = br[0];
-			const id = br[0].reference_image_id;
-			const imgres = await getImgbyId(id);
-			const imgurl = imgres.url;
-			resarr[i] = imgurl;
 		}
-		// console.log("====================================");
-		// console.log(raw[0]);
-		// console.log("====================================");
-		setimgURL(resarr);
 		setCatdata(raw);
 	};
 
@@ -124,6 +121,9 @@ export default function MainArea() {
 									name: catData[0].name,
 									description: catData[0].description,
 									imgid: catData[0].reference_image_id,
+									alt_names: catData[0].alt_names,
+									origin: catData[0].origin,
+									wiki: catData[0].wikipedia_url,
 								});
 							}}
 						>
@@ -136,6 +136,9 @@ export default function MainArea() {
 									name: catData[1].name,
 									description: catData[1].description,
 									imgid: catData[1].reference_image_id,
+									alt_names: catData[1].alt_names,
+									origin: catData[1].origin,
+									wiki: catData[1].wikipedia_url,
 								});
 							}}
 						>
@@ -150,6 +153,9 @@ export default function MainArea() {
 									name: catData[2].name,
 									description: catData[2].description,
 									imgid: catData[2].reference_image_id,
+									alt_names: catData[2].alt_names,
+									origin: catData[2].origin,
+									wiki: catData[2].wikipedia_url,
 								});
 							}}
 						>
@@ -162,6 +168,9 @@ export default function MainArea() {
 									name: catData[3].name,
 									description: catData[3].description,
 									imgid: catData[3].reference_image_id,
+									alt_names: catData[3].alt_names,
+									origin: catData[3].origin,
+									wiki: catData[3].wikipedia_url,
 								});
 							}}
 						>
