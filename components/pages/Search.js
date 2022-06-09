@@ -10,13 +10,14 @@ import {
 	ScrollView,
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
-
+var start = true;
 const API_KEY = "d779136e-7305-4bca-a2cf-7d8033fdb6fc";
 
 export default function Search() {
 	const navigation = useNavigation();
 	const [textval, settextval] = useState("");
 	const [suggestionList, setsuggesions] = useState([]);
+
 	async function getNameList(query) {
 		try {
 			return fetch(`https://api.thecatapi.com/v1/breeds/search?q=${query}`, {
@@ -51,6 +52,7 @@ export default function Search() {
 		setsuggesions([]);
 		textChange(text, count--);
 	}
+
 	return (
 		<SafeAreaView
 			style={{
@@ -67,6 +69,7 @@ export default function Search() {
 					onChangeText={(e) => textChange(e)}
 					style={styles.input}
 					placeholder={"Search Cat Breeds"}
+					autoFocus={true}
 				/>
 				<ScrollView style={{ paddingHorizontal: 20 }}>
 					{suggestionList.map((item, index) => (

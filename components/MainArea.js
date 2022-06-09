@@ -9,7 +9,7 @@ import {
 	CardSection,
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
-
+import catcover from "../assets/catcover.png";
 const loading =
 	"https://cdn.dribbble.com/users/108183/screenshots/2301400/media/6af65dd321fbdf53a04ed7464a644f53.gif";
 import logo from "../assets/whiteoverblacklogo.png";
@@ -87,7 +87,17 @@ export default function MainArea() {
 					</View>
 				</View>
 
-				<View style={styles.right}></View>
+				<View style={styles.right}>
+					<Image
+						style={{
+							height: "100%",
+							width: "100%",
+							resizeMode: "contain",
+							// backgroundColor: "blue",
+						}}
+						source={catcover}
+					/>
+				</View>
 			</View>
 			<View style={styles.lower}>
 				<Text style={{ paddingLeft: 25, paddingTop: 10, fontWeight: "bold" }}>
@@ -196,9 +206,11 @@ const styles = StyleSheet.create({
 		padding: 20,
 		// borderTopLeftRadius: 30,
 		// borderTopRightRadius: 30,
-		// backgroundColor: "black",
+		backgroundColor: "black",
 		display: "flex",
 		flexDirection: "row",
+		justifyContent: "space-between",
+		alignContent: "center",
 	},
 	input: {
 		display: "flex",
@@ -213,6 +225,7 @@ const styles = StyleSheet.create({
 		fontWeight: "bold",
 	},
 	logo: {
+		marginHorizontal: -10,
 		height: 60,
 		aspectRatio: 18 / 9,
 		resizeMode: "contain",
@@ -225,7 +238,7 @@ const styles = StyleSheet.create({
 		flex: 4,
 		// backgroundColor: "orange",
 		width: 100,
-		height: 100,
+		height: 170,
 	},
 
 	black: {
