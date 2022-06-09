@@ -37,6 +37,13 @@ function getImgbyId(id) {
 export default function MainArea() {
 	const navigation = useNavigation();
 	const [imgURL, setimgURL] = useState([loading, loading, loading, loading]);
+	const [catData, setCatdata] = useState([
+		{ name: "", description: "", reference_image_id: "" },
+		{ name: "", description: "", reference_image_id: "" },
+		{ name: "", description: "", reference_image_id: "" },
+		{ name: "", description: "", reference_image_id: "" },
+	]);
+
 	const [nameList, setnameList] = useState([
 		"Savannah",
 		"Bengal",
@@ -45,14 +52,20 @@ export default function MainArea() {
 	]);
 	const getCatImages = async () => {
 		var resarr = [];
+		var raw = [];
 		for (var i = 0; i < 4; i++) {
 			const br = await getcatbyBreed(nameList[i]);
+			raw[i] = br[0];
 			const id = br[0].reference_image_id;
 			const imgres = await getImgbyId(id);
 			const imgurl = imgres.url;
 			resarr[i] = imgurl;
 		}
+		// console.log("====================================");
+		// console.log(raw[0]);
+		// console.log("====================================");
 		setimgURL(resarr);
+		setCatdata(raw);
 	};
 
 	useEffect(() => {
@@ -62,7 +75,7 @@ export default function MainArea() {
 	return (
 		<View style={styles.container}>
 			<View style={styles.upper}>
-				<View style={styles.left} onTouchStart={() => {}}>
+				<View style={styles.left}>
 					<Image style={styles.logo} source={logo} />
 					<Text style={styles.white}>
 						Got to Know more about your cat breed
@@ -106,24 +119,52 @@ export default function MainArea() {
 				>
 					<View style={styles.catimg}>
 						<TouchableOpacity
-							onTouchStart={() => {
-								console.log("tap tap");
+							onPress={() => {
+								navigation.navigate("CatInfo", {
+									name: catData[0].name,
+									description: catData[0].description,
+									imgid: catData[0].reference_image_id,
+								});
 							}}
 						>
 							<Image source={{ uri: imgURL[0] }} style={styles.img} />
 							<Text style={styles.imgtxt}>{nameList[0]}</Text>
 						</TouchableOpacity>
-						<TouchableOpacity>
+						<TouchableOpacity
+							onPress={() => {
+								navigation.navigate("CatInfo", {
+									name: catData[1].name,
+									description: catData[1].description,
+									imgid: catData[1].reference_image_id,
+								});
+							}}
+						>
 							<Image source={{ uri: imgURL[1] }} style={styles.img} />
 							<Text style={styles.imgtxt}>{nameList[1]}</Text>
 						</TouchableOpacity>
 					</View>
 					<View style={styles.catimg}>
-						<TouchableOpacity>
+						<TouchableOpacity
+							onPress={() => {
+								navigation.navigate("CatInfo", {
+									name: catData[2].name,
+									description: catData[2].description,
+									imgid: catData[2].reference_image_id,
+								});
+							}}
+						>
 							<Image source={{ uri: imgURL[2] }} style={styles.img} />
 							<Text style={styles.imgtxt}>{nameList[2]}</Text>
 						</TouchableOpacity>
-						<TouchableOpacity>
+						<TouchableOpacity
+							onPress={() => {
+								navigation.navigate("CatInfo", {
+									name: catData[3].name,
+									description: catData[3].description,
+									imgid: catData[3].reference_image_id,
+								});
+							}}
+						>
 							<Image source={{ uri: imgURL[3] }} style={styles.img} />
 							<Text style={styles.imgtxt}>{nameList[3]}</Text>
 						</TouchableOpacity>

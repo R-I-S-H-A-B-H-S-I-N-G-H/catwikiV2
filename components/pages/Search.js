@@ -76,8 +76,7 @@ export default function Search() {
 									name: item.name,
 									origin: item.origin,
 									description: item.description,
-                                    imgid: item.reference_image_id,
-                                    alt_names:
+									imgid: item.reference_image_id,
 								})
 							}
 							style={{
