@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
 	StyleSheet,
 	Text,
@@ -8,39 +8,73 @@ import {
 	Image,
 	CardSection,
 } from "react-native";
+import { useNavigation } from "@react-navigation/native";
+
+const loading =
+	"https://cdn.dribbble.com/users/108183/screenshots/2301400/media/6af65dd321fbdf53a04ed7464a644f53.gif";
+import logo from "../assets/whiteoverblacklogo.png";
+import Searchbar from "./Searchbar";
+const API_KEY = "d779136e-7305-4bca-a2cf-7d8033fdb6fc";
+
+function getnewImg() {
+	return fetch(`https://api.thecatapi.com/v1/breeds?x-api-key=${API_KEY}`).then(
+		(res) => res.json(),
+	);
+}
+function getcatbyBreed(keyword) {
+	return fetch(
+		`https://api.thecatapi.com/v1/breeds/search?x-api-key=${API_KEY} &q=${keyword}`,
+	).then((res) => res.json());
+}
+function getImgbyId(id) {
+	return fetch(`https://api.thecatapi.com/v1/images/${id}`, {
+		headers: {
+			"x-api-key": `${API_KEY}`,
+		},
+	}).then((res) => res.json());
+}
 
 export default function MainArea() {
-	const [text, onChangeText] = useState("Search");
-	const [number, onChangeNumber] = useState(null);
-	const [imgURL, setimgURL] = useState(
-		"https://cdn2.thecatapi.com/images/58r4fYPa6.jpg",
-	);
-	const res = async () => {
-		try {
-			const response = await fetch(
-				"https://api.thecatapi.com/v1/images/search",
-			);
-			const json = await response.json();
-			console.log(json);
-			setimgURL(json[0].url);
-			return json[0].url;
-		} catch (error) {
-			console.error(error);
+	const navigation = useNavigation();
+	const [imgURL, setimgURL] = useState([loading, loading, loading, loading]);
+	const [nameList, setnameList] = useState([
+		"Savannah",
+		"Bengal",
+		"Norwegian Forest Cat",
+		"Selkirk Rex",
+	]);
+	const getCatImages = async () => {
+		var resarr = [];
+		for (var i = 0; i < 4; i++) {
+			const br = await getcatbyBreed(nameList[i]);
+			const id = br[0].reference_image_id;
+			const imgres = await getImgbyId(id);
+			const imgurl = imgres.url;
+			resarr[i] = imgurl;
 		}
+		setimgURL(resarr);
 	};
+
+	useEffect(() => {
+		getCatImages();
+	}, []);
+
 	return (
 		<View style={styles.container}>
 			<View style={styles.upper}>
-				<View style={styles.left}>
-					<Text style={styles.title}>CatWIKI</Text>
+				<View style={styles.left} onTouchStart={() => {}}>
+					<Image style={styles.logo} source={logo} />
 					<Text style={styles.white}>
 						Got to Know more about your cat breed
 					</Text>
-					<TextInput
+					<View
+						onTouchStart={() => navigation.navigate("Search")}
 						style={styles.input}
-						onChangeText={onChangeText}
-						value={text}
-					/>
+					>
+						<Text style={{ fontWeight: "bold", color: "gray" }}>
+							Search Cat Breeds
+						</Text>
+					</View>
 				</View>
 
 				<View style={styles.right}></View>
@@ -67,11 +101,32 @@ export default function MainArea() {
 						alignItems: "center",
 						justifyContent: "center",
 						padding: 10,
+						// backgroundColor: "blue",
 					}}
 				>
 					<View style={styles.catimg}>
-						<Image source={{ uri: imgURL }} style={styles.img} />
-						<Image source={{ uri: imgURL }} style={styles.img} />
+						<TouchableOpacity
+							onTouchStart={() => {
+								console.log("tap tap");
+							}}
+						>
+							<Image source={{ uri: imgURL[0] }} style={styles.img} />
+							<Text style={styles.imgtxt}>{nameList[0]}</Text>
+						</TouchableOpacity>
+						<TouchableOpacity>
+							<Image source={{ uri: imgURL[1] }} style={styles.img} />
+							<Text style={styles.imgtxt}>{nameList[1]}</Text>
+						</TouchableOpacity>
+					</View>
+					<View style={styles.catimg}>
+						<TouchableOpacity>
+							<Image source={{ uri: imgURL[2] }} style={styles.img} />
+							<Text style={styles.imgtxt}>{nameList[2]}</Text>
+						</TouchableOpacity>
+						<TouchableOpacity>
+							<Image source={{ uri: imgURL[3] }} style={styles.img} />
+							<Text style={styles.imgtxt}>{nameList[3]}</Text>
+						</TouchableOpacity>
 					</View>
 				</View>
 			</View>
@@ -86,16 +141,7 @@ const styles = StyleSheet.create({
 		borderRadius: 30,
 		overflow: "hidden",
 	},
-	input: {
-		marginVertical: 20,
-		marginRight: 30,
-		backgroundColor: "white",
-		borderRadius: 18,
-		paddingVertical: 6,
-		paddingLeft: 15,
-		color: "gray",
-		fontWeight: "bold",
-	},
+
 	upper: {
 		padding: 20,
 		// borderTopLeftRadius: 30,
@@ -103,6 +149,23 @@ const styles = StyleSheet.create({
 		// backgroundColor: "black",
 		display: "flex",
 		flexDirection: "row",
+	},
+	input: {
+		display: "flex",
+		alignItems: "flex-start",
+		justifyContent: "center",
+		height: 40,
+		marginVertical: 10,
+		backgroundColor: "white",
+		borderRadius: 18,
+		paddingVertical: 6,
+		paddingLeft: 15,
+		fontWeight: "bold",
+	},
+	logo: {
+		height: 60,
+		aspectRatio: 18 / 9,
+		resizeMode: "contain",
 	},
 	left: {
 		flex: 4,
@@ -135,7 +198,6 @@ const styles = StyleSheet.create({
 	},
 
 	catimg: {
-		// backgroundColor: "black",
 		display: "flex",
 		flexDirection: "row",
 		justifyContent: "center",
@@ -143,9 +205,14 @@ const styles = StyleSheet.create({
 		width: "100%",
 	},
 	img: {
-		minWidth: "40%",
+		minWidth: "48%",
 		aspectRatio: 5 / 5.8,
 		borderRadius: 10,
 		margin: 5,
+		resizeMode: "contain",
+	},
+	imgtxt: {
+		fontWeight: "bold",
+		paddingLeft: 10,
 	},
 });

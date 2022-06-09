@@ -1,22 +1,19 @@
-import { StatusBar } from "expo-status-bar";
-import { StyleSheet, Text, View } from "react-native";
-
+import { StyleSheet, Text, View, Image } from "react-native";
+import logoimage from "../assets/titlelogo.png";
 export default function Navbar() {
-	return (
-		<View style={styles.container}>
-			<Text style={styles.title}>CatWIKI</Text>
-		</View>
-	);
+	return <Image style={styles.logo} source={logoimage} />;
 }
 const styles = StyleSheet.create({
-	container: {
+	// container: {
+	// 	// backgroundColor: "gray",
+	// 	padding: 10,
+	// 	overflow: "hidden",
+	// },
+	logo: {
 		backgroundColor: "white",
-		padding: 10,
-	},
-	title: {
-		color: "black",
-		fontSize: 32,
-		fontWeight: "bold",
-		letterSpacing: 3,
+		// marginTop: 30,
+		height: "10%",
+		width: "60%",
+		resizeMode: "contain",
 	},
 });
